@@ -1,0 +1,1 @@
+{"name": "Рецепты", "short_name": "Рецепты", "start_url": "./", "display": "standalone", "background_color": "#f6f1ea", "theme_color": "#8a5a44", "lang": "ru", "icons": [{"src": "icon.png", "sizes": "512x512", "type": "image/png"}]}

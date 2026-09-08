@@ -1,0 +1,40 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Рецепты</title>
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#8a5a44">
+<link rel="icon" href="icon.png"><link rel="apple-touch-icon" href="icon.png">
+<style>
+:root{--bg:#f6f1ea;--card:#fff;--acc:#8a5a44;--acc2:#c99a6b;--tx:#2b2622;--mu:#7a6f66}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.35 -apple-system,Segoe UI,Roboto,sans-serif}
+header{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 12px 6px;box-shadow:0 2px 6px #0001}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+h1{margin:0;font-size:22px;color:var(--acc)}
+#q{flex:1;min-width:160px;font-size:18px;padding:10px 12px;border:2px solid #d9cfc4;border-radius:10px;outline:0}
+#q:focus{border-color:var(--acc2)}
+button,select{font-size:15px;padding:9px 12px;border-radius:10px;border:1px solid #d9cfc4;background:#fff;color:var(--tx)}
+button.acc{background:var(--acc);color:#fff;border-color:var(--acc);font-weight:600}
+button.on{background:#eadfd3}
+.cats{display:flex;gap:6px;overflow-x:auto;padding:6px 0 2px;scrollbar-width:none}.cats::-webkit-scrollbar{display:none}
+.cats button{white-space:nowrap;padding:7px 12px;border-radius:20px}
+#status{color:var(--mu);font-size:14px;padding:6px 14px}
+#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;padding:0 12px 24px}
+.card{background:var(--card);border:1px solid #e3d9cf;border-radius:12px;overflow:hidden;cursor:pointer}
+.card img{width:100%;aspect-ratio:240/340;object-fit:cover;display:block;background:#eee}
+.card .t{font-weight:600;font-size:14px;padding:8px 8px 2px}.card .s{color:var(--mu);font-size:12px;padding:0 8px 8px}
+#more{display:block;margin:0 auto 30px;padding:12px 24px}
+#fridge{position:fixed;inset:0;background:var(--bg);z-index:20;display:none;flex-direction:column}
+#fridge.open{display:flex}#fridge .body{overflow:auto;padding:0 14px 20px}
+#fridge h3{margin:14px 0 4px;color:var(--acc)}#fridge label{display:block;padding:7px 0;font-size:16px}
+#fridge input{width:20px;height:20px;vertical-align:middle;margin-right:8px}
+#view{position:fixed;inset:0;background:#d9d1c7;z-index:30;display:none;flex-direction:column}
+#view.open{display:flex}#view .bar{background:var(--bg);padding:8px 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+#view .bar b{flex:1;color:var(--acc);font-size:17px}#view .info{background:var(--bg);color:var(--mu);font-size:13px;padding:0 12px 6px}
+#pages{overflow:auto;flex:1;padding:10px}#pages img{display:block;width:100%;max-width:1000px;margin:0 auto 14px;background:#fff;box-shadow:0 1px 4px #0003}
+.empty{padding:50px 20px;text-align:center;color:var(--mu);font-size:18px;grid-column:1/-1}
+</style></head><body>
+<header><div class="row"><h1>Рецепты</h1><input id="q" placeholder="Что ищем? кабачок, суп, курица…" autocomplete="off">
+<button id="clr">✕</button><select id="time"><option value="">Любое время</option><option value="15">до 15 мин</option><option value="30">до 30 мин</option><option value="60">до 1 часа</option></select>
+<button class="acc" id="fbtn">Холодильник</button><button id="rnd">Случайный</button></div><div class="cats" id="cats"></div></header>
+<div id="status"></div><div id="grid"></div><button id="more" style="display:none">Показать ещё</button>
+<div id="fridge"><div class="bar row" style="padding:10px 14px"><button class="acc" id="fclose">← Готово</button><b style="flex:1;color:var(--acc)">Что есть дома?</b><button id="freset">Сбросить</button></div><div class="body" id="fbody"></div></div>
+<div id="view"><div class="bar"><button class="acc" id="back">← Назад</button><b id="vt"></b><button id="prev">‹</button><button id="next">›</button></div><div class="info" id="vi"></div><div id="pages"></div></div>
+<script src="app.js"></script></body></html>
