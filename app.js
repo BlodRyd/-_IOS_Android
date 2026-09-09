@@ -1,5 +1,6 @@
 const $ = s => document.querySelector(s);
 const LS = 'recipes_access_v1';
+const DEV = 'recipes_device_v1';
 let D, R, G, sel = new Set(), cat = null, guides = false, res = [], shown = 0, cur = -1;
 
 const norm = s => s.toLowerCase().replace(/ё/g, 'е');
@@ -191,25 +192,57 @@ function boot(d) {
   setCat(null);
 }
 
-async function unlock(raw) {
-  const key = canonical(raw);
+function deviceId() {
+  let id = localStorage.getItem(DEV);
+  if (!id) {
+    id = (crypto.randomUUID && crypto.randomUUID()) || ('d' + Date.now() + '-' + Math.random().toString(16).slice(2));
+    localStorage.setItem(DEV, id);
+  }
+  return id;
+}
+async function claim(key) {
+  const api = (window.RECIPES_API || '').replace(/\/$/, '');
+  if (!api) throw new Error('Сервер доступа ещё не настроен');
+  let r;
+  try {
+    r = await fetch(api + '/claim', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ key, device: deviceId() }),
+    });
+  } catch {
+    throw new Error('Нужен интернет для первого входа');
+  }
+  let data = {};
+  try { data = await r.json(); } catch {}
+  if (!r.ok) throw new Error(data.error || 'Нужен интернет для первого входа');
+  if (!data.wrap) throw new Error('Сервер не отдал доступ');
+  return data.wrap;
+}
+async function unlock(raw, reuseWrap) {
+  const key = canonical(typeof raw === 'string' && raw.startsWith('{') ? JSON.parse(raw).key : raw);
   if (!key) throw new Error('Ключ похож на RCPT-XXXX-XXXX-XXXX');
-  const hashes = await fetch('keys.json').then(r => r.json());
-  const h = await shaHex(key);
-  const wrap = hashes[h];
-  if (!wrap) throw new Error('Такого ключа нет. Проверьте буквы и цифры.');
+  let wrap = reuseWrap;
+  if (!wrap) {
+    $('#gerr').textContent = 'Проверяем ключ…';
+    wrap = await claim(key);
+  }
   $('#gerr').textContent = 'Открываем рецепты…';
   const master = await unwrapMaster(key, wrap);
   const bin = new Uint8Array(await fetch('data.enc').then(r => r.arrayBuffer()));
   const data = await decryptData(master, bin);
-  localStorage.setItem(LS, key);
+  localStorage.setItem(LS, JSON.stringify({ key, wrap }));
   boot(data);
 }
 
 async function start() {
   const saved = localStorage.getItem(LS);
   if (saved) {
-    try { await unlock(saved); return; } catch (e) { localStorage.removeItem(LS); }
+    try {
+      const obj = saved.startsWith('{') ? JSON.parse(saved) : { key: saved };
+      await unlock(obj.key, obj.wrap);
+      return;
+    } catch (e) { localStorage.removeItem(LS); }
   }
   $('#go').onclick = async () => {
     $('#gerr').textContent = '';

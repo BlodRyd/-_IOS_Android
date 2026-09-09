@@ -52,7 +52,7 @@ button.on{background:#eadfd3}
 <div id="gate">
   <div class="box">
     <h1>Рецепты</h1>
-    <p>Введите ключ доступа. Один ключ открывает приложение на этом телефоне навсегда — платёж внутри не нужен.</p>
+    <p>Один ключ — один телефон. Первый вход нужен интернет; VPN доступ не сбивает. Если почистить данные сайта, ключ придётся сбросить у продавца.</p>
     <input id="key" placeholder="RCPT-XXXX-XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false">
     <button class="acc" id="go">Войти</button>
     <div id="gerr"></div>
@@ -66,6 +66,7 @@ button.on{background:#eadfd3}
 <div id="fridge"><div class="bar row" style="padding:10px 14px"><button class="acc" id="fclose">← Готово</button><b style="flex:1;color:var(--acc)">Что есть дома?</b><button id="freset">Сбросить</button></div><div class="body" id="fbody"></div></div>
 <div id="view"><div class="bar"><button class="acc" id="back">← Назад</button><b id="vt"></b><button id="prev">‹</button><button id="next">›</button></div><div class="info" id="vi"></div><div id="pages"></div></div>
 </div>
+<script src="config.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

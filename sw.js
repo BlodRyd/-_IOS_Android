@@ -1,6 +1,6 @@
-const C = 'recipes-v2';
+const C = 'recipes-v3';
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(C).then(c => c.addAll(['./', 'index.html', 'app.js', 'keys.json', 'manifest.json', 'icon.png'])));
+  e.waitUntil(caches.open(C).then(c => c.addAll(['./', 'index.html', 'app.js', 'config.js', 'manifest.json', 'icon.png'])));
   self.skipWaiting();
 });
 self.addEventListener('activate', e => e.waitUntil(
